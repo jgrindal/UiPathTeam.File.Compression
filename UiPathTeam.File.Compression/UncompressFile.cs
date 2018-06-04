@@ -30,19 +30,23 @@ namespace UiPathTeam.File.Compression
         {
             if(Format == SupportedTypes.AutoDetect)
             {
-                Format = this.DetectType();
+                IUncompressor uncompressor = this.DetectType(FilePath.Get(context));
+                uncompressor.UncompressFile(FilePath.Get(context));
             }
 
-            switch (Format)
+            if (Format != SupportedTypes.AutoDetect)
             {
-                case SupportedTypes.ZIP:
-                    UncompressZIP(FilePath.Get(context), OutputPath.Get(context));
-                    break;
-                case SupportedTypes.RAR:
-                    UncompressRAR();
-                    break;
-                default:
-                    throw new NotImplementedException("Format not implemented yet");
+                switch (Format)
+                {
+                    case SupportedTypes.ZIP:
+                        UncompressZIP(FilePath.Get(context), OutputPath.Get(context));
+                        break;
+                    case SupportedTypes.RAR:
+                        UncompressRAR();
+                        break;
+                    default:
+                        throw new NotImplementedException("Format not implemented yet");
+                }
             }
         }
 
@@ -70,10 +74,38 @@ namespace UiPathTeam.File.Compression
             }
         }
 
-        protected SupportedTypes DetectType()
+        protected IUncompressor DetectType(String FilePath)
         {
-            // TODO: Implement detection of type based on file extension
-            return SupportedTypes.ZIP;
+            if (FilePath.Equals(""))
+            {
+                throw new ArgumentNullException("Please specify a valid filepath");
+            }
+            FilePath = FilePath.ToLower();
+
+            if (FilePath.EndsWith(".zip"))
+            {
+                return new ZipUncompressor();
+            }
+            else if (FilePath.EndsWith(".zipx"))
+            {
+                return new ZipXUncompressor();
+            }
+            else if (FilePath.EndsWith(".rar"))
+            {
+                return new RarUncompressor();
+            }
+            else if (FilePath.EndsWith(".gz") || FilePath.EndsWith(".tgz"))
+            {
+                return new GzUncompressor();
+            }
+            else if (FilePath.EndsWith(".7z"))
+            {
+                return new SevenZUncompressor();
+            }
+            else
+            {
+                throw new NotImplementedException("This filetype is not supported!");
+            }
         }
     }
 }

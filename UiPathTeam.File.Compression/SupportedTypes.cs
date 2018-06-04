@@ -6,6 +6,7 @@ namespace UiPathTeam.File.Compression
     {
         AutoDetect,
         ZIP,
+        ZIPX,
         RAR,
         GZ,
         SevenZip

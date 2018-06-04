@@ -6,8 +6,11 @@ using System.Threading.Tasks;
 
 namespace UiPathTeam.File.Compression
 {
-    public interface IUncompressor
+    class RarUncompressor : IUncompressor
     {
-        void UncompressFile(String FilePath);
+        public void UncompressFile(string FilePath)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
