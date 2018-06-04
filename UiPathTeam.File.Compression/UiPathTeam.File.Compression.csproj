@@ -46,6 +46,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ZipUncompressor.cs" />
+    <Compile Include="IUncompressor.cs" />
     <Compile Include="SupportedTypes.cs" />
     <Compile Include="UncompressFile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
