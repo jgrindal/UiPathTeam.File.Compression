@@ -5,8 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Activities;
 using System.ComponentModel;
-using System.IO.Compression;
-using Ionic.Zip;
 
 namespace UiPathTeam.File.Compression
 {
@@ -24,58 +22,31 @@ namespace UiPathTeam.File.Compression
         public InArgument<String> Password { get; set; }   // TODO: Make SecureString
 
         [Category("Input")]
-        public SupportedTypes Format { get; set; }  
+        public SupportedTypes Format { get; set; }
+
+        private IUncompressor uncompressor;
 
         protected override void Execute(NativeActivityContext context)
         {
-            if(Format == SupportedTypes.AutoDetect)
+            switch (Format)
             {
-                IUncompressor uncompressor = this.DetectType(FilePath.Get(context));
-                uncompressor.UncompressFile(FilePath.Get(context));
-            }
-
-            if (Format != SupportedTypes.AutoDetect)
-            {
-                switch (Format)
-                {
-                    case SupportedTypes.ZIP:
-                        UncompressZIP(FilePath.Get(context), OutputPath.Get(context));
-                        break;
-                    case SupportedTypes.RAR:
-                        UncompressRAR();
-                        break;
-                    default:
-                        throw new NotImplementedException("Format not implemented yet");
-                }
+                case SupportedTypes.AutoDetect:
+                    uncompressor = this.DetectUncompressorFactory(FilePath.Get(context));
+                    break;
+                case SupportedTypes.ZIP:
+                    uncompressor = new ZipUncompressor(FilePath.Get(context));
+                    break;
+                case SupportedTypes.RAR:
+                    break;
+                default:
+                    throw new NotImplementedException("Format not implemented yet");
             }
         }
 
-        /**
-         * Uncompresses the file in RAR format at FilePath to output location
-         * 
-         */
-        private void UncompressRAR()
+        protected IUncompressor DetectUncompressorFactory(String FilePath)
         {
-            throw new NotImplementedException();
-        }
 
-        /**
-         * Uncompresses the file in ZIP format at FilePath to output location
-         * 
-         */
-        private void UncompressZIP(String FilePath, String OutputPath)
-        {
-            using (ZipFile zip = ZipFile.Read(FilePath))
-            {
-                foreach (ZipEntry e in zip)
-                {
-                    e.Extract(OutputPath);
-                }
-            }
-        }
-
-        protected IUncompressor DetectType(String FilePath)
-        {
+            // TODO: replace this with a switch statement
             if (FilePath.Equals(""))
             {
                 throw new ArgumentNullException("Please specify a valid filepath");
@@ -84,23 +55,23 @@ namespace UiPathTeam.File.Compression
 
             if (FilePath.EndsWith(".zip"))
             {
-                return new ZipUncompressor();
+                return new ZipUncompressor(FilePath);
             }
             else if (FilePath.EndsWith(".zipx"))
             {
-                return new ZipXUncompressor();
+                return new ZipXUncompressor(FilePath);
             }
             else if (FilePath.EndsWith(".rar"))
             {
-                return new RarUncompressor();
+                return new RarUncompressor(FilePath);
             }
             else if (FilePath.EndsWith(".gz") || FilePath.EndsWith(".tgz"))
             {
-                return new GzUncompressor();
+                return new GzUncompressor(FilePath);
             }
             else if (FilePath.EndsWith(".7z"))
             {
-                return new SevenZUncompressor();
+                return new SevenZUncompressor(FilePath);
             }
             else
             {

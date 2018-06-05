@@ -6,8 +6,22 @@ using System.Threading.Tasks;
 
 namespace UiPathTeam.File.Compression
 {
-    public interface IUncompressor
+    public abstract class IUncompressor
     {
-        void UncompressFile(String FilePath);
+        protected String FilePath;
+        protected String OutputPath;
+
+        public IUncompressor(String FilePath)
+        {
+            this.FilePath = FilePath;
+            this.OutputPath = OutputPath;
+        }
+
+        public void SetOutputPath(String OutputPath)
+        {
+            this.OutputPath = OutputPath;
+        }
+
+        public abstract void UncompressFile();
     }
 }

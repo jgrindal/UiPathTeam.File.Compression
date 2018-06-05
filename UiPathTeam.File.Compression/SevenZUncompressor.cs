@@ -8,7 +8,9 @@ namespace UiPathTeam.File.Compression
 {
     class SevenZUncompressor : IUncompressor
     {
-        public void UncompressFile(string FilePath)
+        public SevenZUncompressor(String FilePath) : base(FilePath) { }
+
+        public override void UncompressFile()
         {
             throw new NotImplementedException();
         }

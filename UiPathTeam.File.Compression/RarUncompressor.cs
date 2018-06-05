@@ -8,7 +8,9 @@ namespace UiPathTeam.File.Compression
 {
     class RarUncompressor : IUncompressor
     {
-        public void UncompressFile(string FilePath)
+        public RarUncompressor(String FilePath) : base(FilePath) { }
+
+        public override void UncompressFile()
         {
             throw new NotImplementedException();
         }

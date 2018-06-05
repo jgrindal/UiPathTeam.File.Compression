@@ -46,11 +46,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GzUncompressor.cs" />
+    <Compile Include="RarUncompressor.cs" />
+    <Compile Include="SevenZUncompressor.cs" />
     <Compile Include="ZipUncompressor.cs" />
     <Compile Include="IUncompressor.cs" />
     <Compile Include="SupportedTypes.cs" />
     <Compile Include="UncompressFile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ZipXUncompressor.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
