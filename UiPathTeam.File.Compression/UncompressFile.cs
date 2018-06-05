@@ -49,8 +49,8 @@ namespace UiPathTeam.File.Compression
             {
                 throw new ArgumentNullException("Please specify a valid filepath");
             }
-            FilePath = FilePath.ToLower();
-            String suffix = FilePath.Substring(FilePath.LastIndexOf("."));
+            String FilePathLower = FilePath.ToLower();
+            String suffix = FilePathLower.Substring(FilePathLower.LastIndexOf("."));
 
             switch (suffix)
             {
