@@ -36,7 +36,17 @@ namespace UiPathTeam.File.Compression
                 case SupportedTypes.ZIP:
                     uncompressor = new ZipUncompressor(FilePath.Get(context));
                     break;
+                case SupportedTypes.ZIPX:
+                    uncompressor = new ZipXUncompressor(FilePath.Get(context));
+                    break;
                 case SupportedTypes.RAR:
+                    uncompressor = new RarUncompressor(FilePath.Get(context));
+                    break;
+                case SupportedTypes.GZ:
+                    uncompressor = new GzUncompressor(FilePath.Get(context));
+                    break;
+                case SupportedTypes.SevenZip:
+                    uncompressor = new SevenZUncompressor(FilePath.Get(context));
                     break;
                 default:
                     throw new NotImplementedException("Format not implemented yet");
@@ -65,8 +75,9 @@ namespace UiPathTeam.File.Compression
                     return new GzUncompressor(FilePath);
                 case ".7z":
                     return new SevenZUncompressor(FilePath);
+                default:
+                    throw new NotImplementedException("This filetype is not supported!");
             }
-            throw new NotImplementedException("This filetype is not supported!");
         }
     }
 }
