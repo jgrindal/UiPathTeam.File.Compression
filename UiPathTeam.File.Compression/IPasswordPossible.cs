@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace UiPathTeam.File.Compression
 {
-    interface Interface1
+    interface IPasswordPossible
     {
+        void SetPassword(String userPassword);
+
     }
 }

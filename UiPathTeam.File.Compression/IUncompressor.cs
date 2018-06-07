@@ -14,7 +14,6 @@ namespace UiPathTeam.File.Compression
         public IUncompressor(String FilePath)
         {
             this.FilePath = FilePath;
-            this.OutputPath = OutputPath;
         }
 
         public void SetOutputPath(String OutputPath)
